@@ -5,7 +5,7 @@ def choose_menu(): #validates the menu options
     while lrunning == True:
         try:
             input_num = int(input("Input your choice: "))
-            if input_num  > 0 and input_num  < 7:
+            if input_num  > 0 and input_num  <= 7:
                 lrunning = False
                 return input_num 
             else: 
@@ -25,23 +25,21 @@ def input_student(): # asks for the information that is required in the program
     student = {
         'name':'name_d',
         'room':'room_d',
-        'grades':{
-                    'Spanish': 999,
-                    'English': 999,
-                    'Social Studies': 999,
-                    'Science': 999,
-                    'Average': 0
+        'Spanish': 999,
+        'English': 999,
+        'Social Studies': 999,
+        'Science': 999,
+        'average': 0
         }
-    }
+    
     student['name'] = data_name
     student['room'] = data_room
-    student['grades'] = {
-        'Spanish':data_grade_sp,
-        'English':data_grade_en,
-        'Social Studies':data_grade_ss,
-        'Science':data_grade_sc,
-        'Average': calculate_avg(data_grade_sp, data_grade_en, data_grade_ss, data_grade_sc)
-    } 
+    student['Spanish'] = data_grade_sp
+    student['English'] = data_grade_en
+    student['Social Studies'] = data_grade_ss
+    student['Science'] = data_grade_sc
+    student['average'] = calculate_avg(data_grade_sp, data_grade_en, data_grade_ss, data_grade_sc)
+    
     
     return student
 
@@ -50,10 +48,17 @@ def add_student(): #trigger for option 1
     print('Student added')
 
 
-def show_students(): #This is a bare bones section for menu option 2
+def show_students(): #Shows students, their room and grades
     print('These are the students in the database:')
     for num in data.students_and_grades:
-        print(num)
+        print(f'{num['name']} from room {num['room']}')
+        print('-------Grades-------')
+        print(f'    Spanish: {num['Spanish']}')
+        print(f'    English: {num['English']}')
+        print(f'Social Studies: {num['Social Studies']}')
+        print(f'    Science: {num['Science']}')
+        print(f'    Average: {num['average']}')
+        print('---------------------')
 
 
 def calculate_avg(grade1, grade2, grade3, grade4): #calculates the average to add it right away into the dictionary that each student is
@@ -71,7 +76,7 @@ def compare_avg():    # I need to iterate the grade dictionary, need to take out
     top3 = 0
     for student in data.students_and_grades:
         done = False
-        avg_grade = student['grades']['Average']
+        avg_grade = student['average']
         while done == False:
             if avg_grade > top1:
                 top3 = top2
@@ -94,7 +99,16 @@ def compare_avg():    # I need to iterate the grade dictionary, need to take out
             else:
                 done = True
 
-    print(f'Los top 3 promedios son:')
-    print(f'Estudiante {top1name} con un promedio de {top1}')
-    print(f'Estudiante {top2name} con un promedio de {top2}')
-    print(f'Estudiante {top3name} con un promedio de {top3}')
+    print(f'Top 3 Students:')
+    print(f'{top1name} with an average of {top1}')
+    print(f'{top2name} with an average of {top2}')
+    print(f'{top3name} with an average of {top3}')
+
+
+def show_average_of_avegares():
+    list_of_averages = []
+    for student in data.students_and_grades:
+        list_of_averages.append(student['average'])
+    final_average = sum(list_of_averages)/len(list_of_averages)
+    return final_average
+

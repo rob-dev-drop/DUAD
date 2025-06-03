@@ -9,6 +9,7 @@ def show_menu():
     print('4 - Show score average for all students')
     print('5 - Export current information to CSV')
     print('6 - Import from CSV')
+    print('7 - Exit')
     selection = actions.choose_menu()
     return selection
 
