@@ -41,9 +41,9 @@ def trigger_main_menu(): #has logic to call fuctions from actions module accordi
         elif num_select == 4:
             actions.show_average_of_avegares()
         elif num_select == 5:
-            data.export2csv()
+            data.export2csv(data.students_and_grades)
         elif num_select == 6:
-            data.import_csv()
+            data.students_and_grades = data.import_csv()
         elif num_select == 7:
             running = False
             print('Goodbye')
