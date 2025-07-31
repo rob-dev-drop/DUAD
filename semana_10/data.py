@@ -1,8 +1,6 @@
 import actions
 import csv 
 
-students_and_grades = []
-
 
 def export2csv(saved): #export the file to a CSV
     with open('students.csv','w',newline='') as file:

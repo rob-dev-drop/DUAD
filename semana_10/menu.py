@@ -28,22 +28,23 @@ def choose_menu(): #validates the menu options
             print('Invalid selection, please select an option from the menu')
 
 
-def trigger_main_menu(): #has logic to call fuctions from actions module according to the option selected in show_menu()
+def trigger_main_menu(studentlist): #has logic to call fuctions from actions module according to the option selected in show_menu()
     running = True
+    x = []
     while running == True:
         num_select = show_menu()
         if num_select == 1:
-            actions.add_student()
+            x.append(actions.add_student())
         elif num_select == 2:
-            actions.show_students()
+            actions.show_students(x)
         elif num_select == 3:
-            actions.compare_avg()
+            actions.compare_avg(x)
         elif num_select == 4:
             actions.show_average_of_avegares()
         elif num_select == 5:
-            data.export2csv(data.students_and_grades)
+            data.export2csv(x)
         elif num_select == 6:
-            data.students_and_grades = data.import_csv()
+            x = data.import_csv()
         elif num_select == 7:
             running = False
             print('Goodbye')

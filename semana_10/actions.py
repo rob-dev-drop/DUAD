@@ -47,13 +47,14 @@ def validate_grade(): # need to correct the logic
 
 
 def add_student(): #trigger for option 1
-    data.students_and_grades.append(input_student())
+    xy = input_student()
     print('Student added')
+    return xy
 
 
-def show_students(): #Shows students, their room and grades
+def show_students(param): #Shows students, their room and grades
     print('These are the students in the database:')
-    for num in data.students_and_grades:
+    for num in param:
         print(f'{num['name']} from room {num['room']}')
         print('-------Grades-------')
         print(f'    Spanish: {num['Spanish']}')
@@ -70,14 +71,14 @@ def calculate_avg(grade1, grade2, grade3, grade4): #calculates the average to ad
     return average
 
 
-def compare_avg():    #Compares the average of all students already input
+def compare_avg(param):    #Compares the average of all students already input
     top1name = ""
     top1 = 0
     top2name = ""
     top2 = 0
     top3name = ""
     top3 = 0
-    for student in data.students_and_grades:
+    for student in param:
         done = False
         avg_grade = student['average']
         while done == False:
@@ -108,9 +109,9 @@ def compare_avg():    #Compares the average of all students already input
     print(f'{top3name} with an average of {top3}')
 
 
-def show_average_of_avegares(): #shows average of all averages from all students
+def show_average_of_avegares(param): #shows average of all averages from all students
     list_of_averages = []
-    for student in data.students_and_grades:
+    for student in param:
         list_of_averages.append(student['average'])
     final_average = sum(list_of_averages)/len(list_of_averages)
     print(f'The average of all registered students is {final_average}')
