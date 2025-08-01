@@ -28,7 +28,7 @@ def choose_menu(): #validates the menu options
             print('Invalid selection, please select an option from the menu')
 
 
-def trigger_main_menu(studentlist): #has logic to call fuctions from actions module according to the option selected in show_menu()
+def trigger_main_menu(): #has logic to call fuctions from actions module according to the option selected in show_menu()
     running = True
     x = []
     while running == True:
@@ -40,7 +40,7 @@ def trigger_main_menu(studentlist): #has logic to call fuctions from actions mod
         elif num_select == 3:
             actions.compare_avg(x)
         elif num_select == 4:
-            actions.show_average_of_avegares()
+            actions.show_average_of_avegares(x)
         elif num_select == 5:
             data.export2csv(x)
         elif num_select == 6:
