@@ -46,7 +46,7 @@ def validate_grade():
             print('Grade must be between 0 and 100')
 
 
-def add_student(): #trigger for option 1
+def add_student(): 
     xy = input_student()
     print('Student added')
     return xy
@@ -109,7 +109,7 @@ def compare_avg(param):    #Compares the average of all students already input
     print(f'{top3name} with an average of {top3}')
 
 
-def show_average_of_avegares(param): #shows average of all averages from all students
+def show_average_of_avegares(param): #shows average of all averages from all studsents
     list_of_averages = []
     for student in param:
         list_of_averages.append(student.avg)

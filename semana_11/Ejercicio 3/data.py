@@ -1,15 +1,7 @@
 import actions
 import csv 
 
-class Student():
-    def __init__(self, name, room, sp_grade, en_grade, ss_grade, sc_grade, avg):
-        self.name = name
-        self.room = room
-        self.sp_grade = sp_grade
-        self.en_grade = en_grade
-        self.ss_grade = ss_grade
-        self.sc_grade = sc_grade
-        self.avg = avg
+# removed duplicated class
 
 def export2csv(saved): #export the file to a CSV
     with open('students.csv','w',newline='') as file:
@@ -26,7 +18,7 @@ def import_csv(): #read the designated CSV file
             reader = csv.reader(file)
             next(reader)
             for row in reader:
-                new_student = Student(
+                new_student = actions.Student(
                     row[0], #name
                     row[1], #room
                     int(row[2]), #spanish
