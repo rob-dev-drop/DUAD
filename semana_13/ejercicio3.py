@@ -3,13 +3,10 @@ from datetime import date
 def check_age(func): #decorator that checks user age and determines if user is adult or raises an error if user is underage
     def wrapper(self):
         userage = func(self)
-        try:
-            if userage > 18:
-                print('User is adult')
-            else:
-                raise ValueError
-        except ValueError:
-            print ('User is underage')
+        if userage < 18:
+            raise ValueError
+        else:
+            print('User is adult')
         return userage
     return wrapper
 

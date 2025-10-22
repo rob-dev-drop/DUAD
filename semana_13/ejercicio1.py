@@ -10,15 +10,21 @@
 #    return wrapper
 
 def numcheck(func):
-    def wrapper(number1,number2):
-        print(f'Numbers entered are {number1} & {number2}')
-        print(f'Result is: {func(number1,number2)}')
+    def wrapper(*args,**kwargs): #since are used as a list, I iterated it so it would show all arguments entered
+        lista = []
+        print('Numbers entered:')
+        for i,arg in enumerate(args):
+            print(f'{args[i]}')
+        func(*args)
     return wrapper
 
 
 @numcheck
-def numsum(number1,number2):
-    result = number1 + number2
+def numsum(*args): #changed this to *args so the function can use any amount of numbers
+    result = 0
+    for i in args:
+        result += i
+    print(result)
     return result
 
-numsum(2,8)
+numsum(2,5,10)
