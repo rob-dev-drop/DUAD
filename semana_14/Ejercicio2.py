@@ -30,20 +30,38 @@ class Doubleendedqueue():
         self.head = new_node
 
     def pop_left(self):
-        self.head = self.head.next
+        if self.head is None:
+            raise Exception("Queue is Empty") #Ahora si la deque esta vacia, hay un exception
+        elif self.head == self.tail:
+            self.head = None
+            self.tail = None
+        else:
+            self.head = self.head.next
 
     def push_right(self, new_node):
-        self.tail.next = new_node
-        self.tail = new_node
+        if self.head is None:        #Si Head es None, entonces Tail tambien, entonces asigna el primer elemento de la linked list. 
+            self.head = new_node              
+            self.tail = new_node
+        else:                        # Si ya hay aunque sea un nodo, ya podemos ir agregandole al tail
+            self.tail.next = new_node 
+            self.tail = new_node
 
     def pop_right(self):
-        current_node = self.head
-        previous_node = current_node
-        while current_node.next is not None:
-            previous_node = current_node
-            current_node = current_node.next
-        self.tail = previous_node
-        previous_node.next = None
+        if self.head is None:
+            raise Exception("Queue is empty") #Ahora si la deque esta vacia, hay un exception
+        elif self.head == self.tail:
+            self.tail = None
+            self.head = None                #Si solo hay un Nodo, hace que tail y head dejen de apuntar hacia el Nodo
+        else:
+            current = self.head
+            while current.next != self.tail:
+                current = current.next     #Para encontrar el penultimo nodo, recorro la lista para
+
+            current.next = None            #Hacer que tail deje de apuntar al ultimo nodo
+            self.tail = current            #Hacer que el penultimo nodo se convierta en el tail
+
+    #Una manera de hacer esto mas facil y robusto para estructuras mas grandes es tener nodos que tengan informacion tanto del next como del previous node. Asi no habria que recorrer la lista cada vez que quiero hacer algo desde el tail.
+
 
 
 cuarto_nodo = Node("Soy el cuarto nodo")
