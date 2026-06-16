@@ -4,6 +4,9 @@ class Categoria:
     def __init__(self, nombre):
         self.nombre = nombre
 
+    
+
+
 class Movimiento:
 
     def __init__(self, descripcion,fecha,monto,categoria,tipo='Gasto'):
@@ -21,7 +24,8 @@ class Movimiento:
         x.append(self.categoria.nombre)
         x.append(self.tipo)
         return x
-    
+
+
 
 
 

@@ -3,22 +3,6 @@ import csv
 import json
 import objects as ob
 
-lista_de_objetos_prueba = [ob.Movimiento('Compra Super','10/20/26',78,ob.Categoria('Alimentacion'),'Gasto'),
-                            ob.Movimiento('Pago Nomina','10/30/26',3500,ob.Categoria('Ingreso Principal'),'Ingreso')]
-
-datos_formato_correcto = {
-    "categorias": ["Alimentacion", "Salario"],
-    "movimientos": [
-        {
-            "descripcion": "Compra Super",
-            "fecha": "2026-10-20",
-            "monto": 78,
-            "categoria": "Alimentación"
-        }
-    ]
-}
-
-
 
 #========= Importing Logic =========#
 
@@ -89,12 +73,13 @@ def read_categories(list_of_categories):
 #======= Exporting JSON Logic =====#
 
 #Convierte la lista de onjetos en el formato en el que se escribira en json, un diccionario
-def convert_object_to_json_format(input):
+def convert_objects_to_json_format(movement_list, category_list):
     final_dict = {
         "categorias": [],
         "movimientos": []
     }
-    for i in input:
+
+    for i in movement_list:
         temp_dict = {
             "descripcion": "",
             "fecha": "",
@@ -113,14 +98,17 @@ def convert_object_to_json_format(input):
         temp_dict["tipo"] = i.tipo
         final_dict["movimientos"].append(temp_dict)
 
+    for i in category_list:
+        if i not in final_dict["categorias"]:
+            final_dict["categorias"].append(i)
 
     return final_dict
 
 
 #Exporta el diccionario a su respectivo file JSON, ya viene con su formato gracias a convert_object_to_json_format()
-def export_json(object_list): #tengo que convertir la lista de objetos en una lista de diccionarios
+def export_json(movement_list, category_list): #tengo que convertir la lista de objetos en una lista de diccionarios
     with open("save_data.json", "w",encoding='utf-8') as file:
-        json.dump(convert_object_to_json_format(object_list), file, indent=4)
+        json.dump(convert_objects_to_json_format(movement_list, category_list), file, indent=4)
 
 
 #======= Exporting CSV Logic =====#
@@ -143,7 +131,7 @@ def convert_obj_to_dictionary(object_list):
     return lista_a_exportar
 
 
-def export_csv(object_list): #Need to add try-excepts  #a esto lo que le llega es una lista de listas #necesito traducir cada objeto en un diccionario
+def export_csv(object_list): 
     headers = ['Descripcion', 'Fecha', 'Monto', 'Categoria', 'Tipo']
     with open('export.csv', mode='w', newline='', encoding='utf-8') as file: #mode W para escribir file
         writer = csv.DictWriter(file,fieldnames=headers)

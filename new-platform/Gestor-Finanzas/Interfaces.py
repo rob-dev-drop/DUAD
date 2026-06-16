@@ -22,28 +22,24 @@ def show_add_item_window(category_list,tipo="Gasto"):
             if event == sg.WIN_CLOSED:
                 return 0
 
-            elif event == 'agregar': #aqui es donde se hace la validacion, pero el ciclo no deberia cerrarse
-                if util.number_validation(values['-Mon-']) == True:
-                    try:
-                        x = ob.Movimiento(values['-Des-'],values['-Fec-'],values['-Mon-'],ob.Categoria(values['-Cat-']),tipo)
-                        add_item_window.close()
-                        return x
-                    except AttributeError:
-                        add_item_window.close()
-                        return AttributeError
-                else:
-                    sg.popup('Monto Ingresado no es numerico. Ingrese un numero')
+            elif event == 'agregar': 
+                try:
+                    new_object = util.GestorFinanzas.create_movement(values['-Des-'],values['-Fec-'],values['-Mon-'],values['-Cat-'],category_list,tipo)
                     add_item_window.close()
-                    return 0
-
+                    return new_object
+                except AttributeError:
+                    sg.popup("Debe llenar todos los espacios requeridos")
+                except ValueError:
+                    sg.popup("Monto invalido. Ingresa un numero")
+            
             elif event == 'cerrar':
                 add_item_window.close()
-                return 0
+                return 'cancel'
 
 
-def show_add_cat_window(): 
+def show_add_cat_window(main_category_list): 
     
-    category_list = fl.read_categories(fl.import_json("save_data.json")["categorias"])
+    category_list = main_category_list
 
     column1 = [[sg.Table(category_list, headings=["Categorias"],key='-MOV_TABLEs-',hide_vertical_scroll=True)]]
     column2 = [[sg.Text("Nueva Categoria"),sg.Input(key='-NEW_CAT-')],[sg.Button('Agregar')]]
@@ -57,50 +53,27 @@ def show_add_cat_window():
             if event == sg.WIN_CLOSED:
                 break
             elif event == 'Agregar': 
-                new_cat = ob.Categoria(values['-NEW_CAT-'])
-                window.close()
-                return new_cat
+                try:
+                    new_category = util.GestorFinanzas.create_category(values['-NEW_CAT-'],category_list)
+                    category_list.append(new_category.nombre)
+                    window.close()
+                    return category_list
+                except NameError:
+                    sg.popup("La categoria ya existe")
+                    window.close()
+                except AttributeError:
+                    sg.popup("Ingrese el nombre de la categoria")
     
 
 
 def show_main_window():
 
-    main_category_list = fl.read_categories(fl.import_json("save_data.json")["categorias"])
-    frontend_movement_table = fl.dict_to_list(fl.import_json("save_data.json")["movimientos"])
-    backend_movement_table = fl.create_obj_list(fl.import_json("save_data.json")["movimientos"])
-
-
-    def save_current_state():
-        fl.export_json(backend_movement_table)
+    main_category_list, frontend_movement_table, backend_movement_table = util.GestorFinanzas.load_start_up()
 
 
     def update_ui(key,target_element):
         window[key].update(values=target_element)
 
-
-    def add_item(tipo='Gasto'):
-        try:
-            x = show_add_item_window(main_category_list,tipo)
-            if x != 0:
-                backend_movement_table.append(x)
-                frontend_movement_table.append(x.list_data())
-                update_ui('-MOV_TABLE-',frontend_movement_table)
-            else:
-                return
-            
-        except (AttributeError):
-            sg.popup("Nueva entrada ha sido descartada")
-        except ValueError:
-            sg.popup("El monto debe ser un valor numerico positivo")
-        save_current_state()
-
-
-    def add_cat():
-        try:
-            new_category = show_add_cat_window()
-            main_category_list.append(new_category.nombre)
-        except AttributeError:
-            sg.popup("Nueva categoria descartada")
 
     layout = [
         [sg.Text("Bienvenido al gestor de finanzas",key='-TITLE-')],
@@ -115,16 +88,26 @@ def show_main_window():
         event, values = window.read()
         
         if event == sg.WIN_CLOSED:
-            save_current_state()
+            util.GestorFinanzas.save_current_state(backend_movement_table,main_category_list)
             break
         elif event == "-CAT_BTN-":
-            add_cat()
+            show_add_cat_window(main_category_list)
 
         elif event == "-SPEND_BTN-":
-            add_item()
+            if util.GestorFinanzas.check_for_categories(main_category_list) == True:
+                x = show_add_item_window(main_category_list)
+                util.GestorFinanzas.update_tables(frontend_movement_table,backend_movement_table,x)
+                update_ui('-MOV_TABLE-',frontend_movement_table)
+            else:
+                sg.popup("Aun no hay categorias, agrega una categoria primero!")
 
         elif event == "-INC_BTN-":
-            add_item('Ingreso')
+            if util.GestorFinanzas.check_for_categories(main_category_list) == True:
+                x = show_add_item_window(main_category_list,'ingreso')
+                util.GestorFinanzas.update_tables(frontend_movement_table,backend_movement_table,x)
+                update_ui('-MOV_TABLE-',frontend_movement_table)
+            else:
+                sg.popup("Aun no hay categorias, agrega una categoria primero!")
 
         elif event == "-EXP_BTN-":
             fl.export_csv(backend_movement_table)
