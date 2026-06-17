@@ -6,8 +6,8 @@ class GestorFinanzas:
     
     @staticmethod
     def number_validation(num):
-        if num >= 0:
-            return num
+        if float(num) >= 0:
+            return float(num)
         else:
             raise ValueError
     
@@ -34,7 +34,7 @@ class GestorFinanzas:
         if category not in list:
             raise AttributeError
         else: 
-            pass
+            return True
     
 
     @staticmethod

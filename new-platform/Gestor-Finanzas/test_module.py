@@ -9,43 +9,44 @@ def test_number_validation_positive_number():
     # arrange
     num = "75"
     # act
-    result = util.number_validation(num)
+    result = util.GestorFinanzas.number_validation(num)
     # assert
-    assert result == True
+    assert result == 75.0
+
 
 def test_number_validation_negative_number():
     # arrange
     num = "-75"
-    # act 
-    result = util.number_validation(num)
-    # assert
-    assert result == False
+    # Act & Assert
+    with pytest.raises(ValueError):
+        util.GestorFinanzas.number_validation(num)
+
 
 def test_number_validation_string():
     # arrange
     num = 'text'
-    # act 
-    result = util.number_validation(num)
-    #assert
-    assert result == False
+    # Act & Assert
+    with pytest.raises(ValueError):
+        util.GestorFinanzas.number_validation(num)
+
 
 
 def test_number_validation_decimal():
     # arrange
     num = "150.75" 
     # act
-    result = util.number_validation(num)
+    result = util.GestorFinanzas.number_validation(num)
     # assert
-    assert result == True
+    assert result == 150.75
 
 
 def test_number_validation_zero():
     # arrange
     num = "0"
     # act
-    result = util.number_validation(num)
+    result = util.GestorFinanzas.number_validation(num)
     # assert
-    assert result == False
+    assert result == 0
 
 ########## ##############
 
@@ -106,12 +107,13 @@ def test_read_categories():
 
 def test_convert_object_to_json_format():
     # arrange:
+    dummy_category_list = ["Trabajo","Comida"]
     obj1 = ob.Movimiento("Cena", "20/10/26", 50.0, ob.Categoria("Comida"), "Gasto")
     obj2 = ob.Movimiento("Sueldo", "30/10/26", 2000.0, ob.Categoria("Trabajo"), "Ingreso")
     obj_list = [obj1, obj2]
 
     #act:
-    result = fl.convert_object_to_json_format(obj_list)
+    result = fl.convert_objects_to_json_format(obj_list,dummy_category_list)
 
     # assert
     # Key verification
@@ -124,3 +126,26 @@ def test_convert_object_to_json_format():
     
     # Category Verification
     assert len(result["categorias"]) == 2
+
+
+
+### Object creation from UI ###
+
+def test_check_available_categories_pass():
+    # Arrange
+    dummy_category_list = ["Ropa","Comida"]
+    # Act
+    result = util.GestorFinanzas.check_available_categories(dummy_category_list,"Ropa")
+    # Assert
+    assert result == True
+
+def test_check_available_categories_fail():
+    # Arrange
+    dummy_category_list = ["Ropa","Comida"]
+    # Act & Assert
+    with pytest.raises(AttributeError):
+        util.GestorFinanzas.check_available_categories(dummy_category_list,"Utiles")
+    
+
+
+
