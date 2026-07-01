@@ -6,7 +6,7 @@
 def print_numbers_times_2(numbers_list):
 	for number in numbers_list:                       #O(n)
 		print(number * 2)                             #O(1)
-		
+
 
 # 2
 def check_if_lists_have_an_equal(list_a, list_b):
@@ -14,7 +14,7 @@ def check_if_lists_have_an_equal(list_a, list_b):
 		for element_b in list_b:                     #O(m) Asumiendo que las listas son del mismo tamaño seria (O(n^2)), de caso contrario, depende del tamaño de las listas O(n*m) (m es el numero de elementos de una segunda lista)
 			if element_a == element_b:               #O(1)
 				return True                          #O(1)
-				
+
 	return False                                     #O(1)
 
 # 3
@@ -22,7 +22,7 @@ def print_10_or_less_elements(list_to_print):
 	list_len = len(list_to_print)                    #O(1)
 	for index in range(min(list_len, 10)):           #O(n)
 		print(list_to_print[index])                  #O(1)
-		
+
 
 # 4
 def generate_list_trios(list_a, list_b, list_c):
@@ -31,5 +31,5 @@ def generate_list_trios(list_a, list_b, list_c):
 		for element_b in list_b:                     #O(m)
 			for element_c in list_c:                 #O(s) (o bien O(n*m*s) siendo cada letra la cantidad de elementos de cada lista que pueden ser distintos por ende no los represento con la misma letra)
 				result_list.append(f'{element_a} {element_b} {element_c}') #O(1)
-				
+
 	return result_list                               #O(1)

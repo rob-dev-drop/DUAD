@@ -1,4 +1,3 @@
-
 # Ejercicio de Análisis de Algoritmos #1
 
 def bubble_sort(arr): 
