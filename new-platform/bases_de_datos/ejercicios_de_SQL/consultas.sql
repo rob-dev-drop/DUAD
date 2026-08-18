@@ -1,5 +1,5 @@
 CREATE TABLE Products (
-    id INT PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT, -- Correccion solicitada: corregi los INT por INTEGER y agregue la clausula AUTOINCREMENT para garantizar ids unicos
     code VARCHAR(10) NOT NULL,
     name TEXT,
     price REAL NOT NULL,
@@ -9,15 +9,17 @@ CREATE TABLE Products (
 );
 
 CREATE TABLE Order_Details (
-    id INT PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     product_id INT NOT NULL,
     invoice_id INT NOT NULL,
     quantity INT NOT NULL,
-    total_amount decimal
+    total_amount decimal,
+    FOREIGN KEY (product_id) REFERENCES Products(id),
+    FOREIGN KEY (invoice_id) REFERENCES Invoices(id)
 );
 
 CREATE TABLE Invoices (
-    id INT PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     invoice_number varchar(20),
     purchase_date date,
     buyer_email text,
@@ -25,13 +27,14 @@ CREATE TABLE Invoices (
 );
 
 CREATE TABLE Cart_Items (
-    id INT PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     product_id int,
-    quantity int
+    quantity int,
+    FOREIGN KEY (product_id) REFERENCES Products(id)
 );
 
 CREATE TABLE Shopping_Cart (
-    id INT PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     products int,
     buyer_email TEXT
 );
