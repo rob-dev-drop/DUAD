@@ -43,10 +43,13 @@ create table Insurance_companies (
     company_name TEXT
 );
 
-
-create table Insurance_policies (
+-- Added this table to comply with 3FN here as per coach feedback
+CREATE TABLE Insurance_policies (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    policy_name TEXT
+    policy_name TEXT,
+    insurance_company_id INTEGER,
+    FOREIGN KEY (insurance_company_id)
+        REFERENCES Insurance_companies(id)
 );
 
 -- This way we have successfully addressed 1NF and 2NF since there is no partial dependencies on each table. 
@@ -62,17 +65,20 @@ create table car_oweners (
     FOREIGN KEY (car_id) REFERENCES Cars(id)
 );
 
-create table car_insurance (
+CREATE TABLE car_insurance (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    insurance_company_id INT,
     insurance_policy_id INT,
     car_id INT,
     FOREIGN KEY (car_id) REFERENCES Cars(id),
-    FOREIGN KEY (insurance_company_id) REFERENCES Insurance_companies(id),
-    FOREIGN KEY (insurance_policy_id) REFERENCES Insurance_policies(id)
+    FOREIGN KEY (insurance_policy_id)
+        REFERENCES Insurance_policies(id)
 );
 
-
+-- Added car makes to comply with 3FN here as per coach feedback
+CREATE TABLE Car_makes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    make_name TEXT UNIQUE
+);
 
 -- With this 1NF and 2NF are complete covered and functional. 
 
@@ -80,10 +86,11 @@ create table car_insurance (
 
 -- We need to create a table for car_models
 
-create table Car_models (
+CREATE TABLE Car_models (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    make text,
-    model text
+    make_id INTEGER,
+    model TEXT,
+    FOREIGN KEY (make_id) REFERENCES Car_makes(id)
 );
 
 --At the same time, we need to correct the Cars table to exclude these extracted columns and include a model_id
@@ -115,16 +122,21 @@ INSERT INTO Insurance_companies (company_name) VALUES
 ('DEF Insurance'),
 ('GHI Insurance');
 
-INSERT INTO Insurance_policies (policy_name) VALUES
-('Fire & Theft'),
-('Full Cover'),
-('Collision'),
-('Basic Legal');
+INSERT INTO Insurance_policies
+(policy_name, insurance_company_id) VALUES
+('Fire & Theft', 1),
+('Full Cover', 2),
+('Collision', 3),
+('Basic Legal', 4);
 
-INSERT INTO Car_models (make, model) VALUES
-('Honda', 'Accord'),
-('Honda', 'CR-V'),
-('Chevrolet', 'Volt');
+INSERT INTO Car_makes (make_name) VALUES
+('Honda'),
+('Chevrolet');
+
+INSERT INTO Car_models (make_id, model) VALUES
+(1, 'Accord'),
+(1, 'CR-V'),
+(2, 'Volt');
 
 INSERT INTO Cars (vin, model_id, year, color) VALUES
 ('1HGCM82633A', 1, 2003, 'Silver'),
@@ -137,10 +149,12 @@ INSERT INTO car_oweners (owner_id, car_id) VALUES
 (103, 2),
 (104, 3);
 
-INSERT INTO car_insurance 
-(insurance_company_id, insurance_policy_id, car_id) VALUES
-(1, 1, 1),
-(2, 2, 1),
-(3, 3, 2),
-(4, 4, 3);
+INSERT INTO car_insurance
+(insurance_policy_id, car_id) VALUES
+(1, 1),
+(2, 1),
+(3, 2),
+(4, 3);
+
+
 
